@@ -1,3 +1,7 @@
 {
   "startMessage":"Hello World!",
+  "botChannel":"discordChannelID",
+  "bot1":"firstBotToken",
+  "bot2":"secondBotToken",
+  "bot3":"thirdBotToken"
 }
