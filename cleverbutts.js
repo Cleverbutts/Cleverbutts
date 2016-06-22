@@ -6,11 +6,11 @@ var CBots = [new Cleverbot,new Cleverbot,new Cleverbot]
   , i = 0
   , callback = function callback(resp){
       setTimeout(function(str1, str2) {
-//        DBots[i].startTyping(config.botChannel);
+        DBots[i].startTyping(config.botChannel);
         CBots[i].write(resp['message'],callback);
         DBots[i = ( ( i + 1 ) %3)].sendMessage("194293716230471681", resp['message']);
       }, 2500);
-//      DBots[i].stopTyping(config.botChannel);
+      DBots[i].stopTyping(config.botChannel);
     };
 Cleverbot.prepare(function(){
   callback({message:config.startMessage})
@@ -26,6 +26,14 @@ DBots[1].on("ready", function(){
 
 DBots[2].on("ready", function(){
   console.log("[info] Bot 3 logged in as " + DBots[2].user.name + "#" + DBots[2].user.discriminator + " (" + DBots[2].user.id + ")")
+});
+
+DBots[0].on("message", function(msg){
+  if(config.owner.includes(msg.sender.id);){
+    if(msg.content.startsWith === "!cleverRestart"){
+      process.exit();
+    }
+  }
 });
 
 DBots[0].loginWithToken(config.bot1);

@@ -3,5 +3,6 @@
   "botChannel":"discordChannelID",
   "bot1":"firstBotToken",
   "bot2":"secondBotToken",
-  "bot3":"thirdBotToken"
+  "bot3":"thirdBotToken",
+  "owner":"your ID"
 }
