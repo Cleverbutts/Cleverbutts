@@ -1,2 +1,0 @@
-node cleverbutts.js
-pause
