@@ -29,7 +29,7 @@ DBots[2].on("ready", function(){
 });
 
 DBots[0].on("message", function(msg){
-  if(config.owner.includes(msg.sender.id);){
+  if(config.owner.includes(msg.sender.id) === true){
     if(msg.content.startsWith === "!cleverRestart"){
       process.exit();
     }
