@@ -1,6 +1,7 @@
 var Cleverbot = require('cleverbot-node');
 var Discordbot = require("discord.js");
 var config = require("./config.json")
+var owner = config.owner
 var DBots = [new Discordbot.Client(),new Discordbot.Client(),new Discordbot.Client()]
 var CBots = [new Cleverbot,new Cleverbot,new Cleverbot]
   , i = 0
@@ -26,14 +27,6 @@ DBots[1].on("ready", function(){
 
 DBots[2].on("ready", function(){
   console.log("[info] Bot 3 logged in as " + DBots[2].user.name + "#" + DBots[2].user.discriminator + " (" + DBots[2].user.id + ")")
-});
-
-DBots[0].on("message", function(msg){
-  if(config.owner.includes(msg.sender.id) === true){
-    if(msg.content.startsWith === "!cleverRestart"){
-      process.exit();
-    }
-  }
 });
 
 DBots[0].loginWithToken(config.bot1);
