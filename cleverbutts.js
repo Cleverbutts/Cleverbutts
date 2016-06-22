@@ -16,17 +16,8 @@ var CBots = [new Cleverbot,new Cleverbot,new Cleverbot]
 Cleverbot.prepare(function(){
   callback({message:config.startMessage})
 });
-
 DBots[0].on("ready", function(){
-  console.log("[info] Bot 1 logged in as " + DBots[0].user.name + "#" + DBots[0].user.discriminator + " (" + DBots[0].user.id + ")")
-});
-
-DBots[1].on("ready", function(){
-  console.log("[info] Bot 2 logged in as " + DBots[1].user.name + "#" + DBots[1].user.discriminator + " (" + DBots[1].user.id + ")")
-});
-
-DBots[2].on("ready", function(){
-  console.log("[info] Bot 3 logged in as " + DBots[2].user.name + "#" + DBots[2].user.discriminator + " (" + DBots[2].user.id + ")")
+//  DBots[0].sendMessage(config.botChannel, config.startMessage);
 });
 
 DBots[0].loginWithToken(config.bot1);
