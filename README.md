@@ -1,6 +1,4 @@
 # Cleverbutts
 This is cleverbutts. 
 <br>
-I need to add a better README.md
-<br>
-Please tell me to add a better README.md
+<h1>Now go to this link: https://cleverbutts.github.io/</h1>
