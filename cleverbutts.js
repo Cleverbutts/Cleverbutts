@@ -16,8 +16,12 @@ var CBots = [new Cleverbot,new Cleverbot,new Cleverbot,new Cleverbot,new Cleverb
     };
 
 Cleverbot.prepare(function(){
-  callback({message:config.startMessage})
+  callback({message:thing})
 });
+
+var things = config.startMessages
+
+var thing = things[Math.floor(Math.random()*things.length)];
 
 DBots[0].on("ready", function(){
   availableAccounts++
