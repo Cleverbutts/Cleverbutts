@@ -48,22 +48,6 @@ DBots[4].on("ready", function(){
   console.log("[info] Bot 5 logged in as " + DBots[4].user.name + "#" + DBots[4].user.discriminator + " (" + DBots[4].user.id + ")")
 });
 
-DBots[0].on("message", function(message){
-  if(message.sender.id === config.owner){
-    if(startMSG != ""){
-    fs.readFile("./config.json", "utf8" , function(err,ctx){
-      var parts = ctx.split(config.startMessage)
-        fs.writeFile("./config.json", parts[0] + startMSG + parts[1], function(){
-          process.exit()
-        });
-      });
-    }
-    else{
-      process.exit()
-    }
-  }
-});
-
 DBots[0].loginWithToken(config.bot1);
 DBots[1].loginWithToken(config.bot2);
 DBots[2].loginWithToken(config.bot3);
