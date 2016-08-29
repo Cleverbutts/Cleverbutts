@@ -1,0 +1,20 @@
+{
+  "startMessage":"This is the start message",
+  "botChannel":"Put the channel ID you wish the bots to talk in here",
+  "voteThreshold":"3",
+  "command_prefix":">",
+  "host":"AlexFlipnote",
+
+  "_comment_":[
+    "If you're using 3 bots, leave bot4 and bot5 empty.",
+    "Also enter how many bots you're hosting",
+    "bot_speed is in ms, so 5000 would be 5 sec delay on messages"
+  ],
+  "bots_hosting":"4",
+  "bot_speed":"3000",
+  "bot1":"",
+  "bot2":"",
+  "bot3":"",
+  "bot4":"",
+  "bot5":""
+}

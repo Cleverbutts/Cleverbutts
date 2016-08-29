@@ -1,55 +1,183 @@
-var Cleverbot = require('cleverbot-node');
-var Discordbot = require("discord.js");
-var fs = require("fs")
-var config = require("./config.json")
-var availableAccounts = 0
-var DBots = [new Discordbot.Client(),new Discordbot.Client(),new Discordbot.Client(),new Discordbot.Client(),new Discordbot.Client()]
-var CBots = [new Cleverbot,new Cleverbot,new Cleverbot,new Cleverbot,new Cleverbot]
-  , i = 0
-  , callback = function callback(resp){
-      setTimeout(function(str1, str2) {
-        DBots[i].startTyping(config.botChannel);
-        CBots[i].write(resp['message'],callback);
-        DBots[i = ( ( i + 1 ) % availableAccounts)].sendMessage(config.botChannel, resp['message']);
-      }, 2500);
-      DBots[i].stopTyping(config.botChannel);
-    };
+var Cleverbot = require('cleverbot-node')
+    , Discordbot = require("discord.js")
+    , fs = require("fs")
+    , config = require("./config.json")
+    , utils = require("./utils.js")
+    , DBots = [new Discordbot.Client(),new Discordbot.Client(),new Discordbot.Client(),new Discordbot.Client(),new Discordbot.Client()]
+    , randombot = Math.floor(Math.random() * config.bots_hosting)
+    , newtext = undefined
+    , lastMessage = "Hello there!"
+    , voters = []
+    , votes = 0;
+
+var CBots = [new Cleverbot,new Cleverbot,new Cleverbot,new Cleverbot] , i = 0 , callback = function callback(resp){
+setTimeout(function(str1, str2) {
+  DBots[i].startTyping(config.botChannel);
+		var toWrite = resp['message'];
+  		if(newtext) {
+  			toWrite = newtext;
+  			newtext = undefined;
+  		}
+    CBots[i].write(toWrite,callback);
+    DBots[i = ( ( i + 1 ) %4)].sendMessage(config.botChannel, toWrite);
+  }, config.bot_speed);
+    DBots[i].stopTyping(config.botChannel);
+};
+
+var commandsProcessed = 0, talkedToTimes = 0;
 
 Cleverbot.prepare(function(){
-  callback({message:thing})
+  lastMessage = config.startMessage; callback({message:config.startMessage})
 });
 
-var things = config.startMessages
-
-var thing = things[Math.floor(Math.random()*things.length)];
-
-DBots[0].on("ready", function(){
-  availableAccounts++
-  console.log("[info] Bot 1 logged in as " + DBots[0].user.name + "#" + DBots[0].user.discriminator + " (" + DBots[0].user.id + ")")
+DBots[i].on("message", (msg) => {
+  	if (!msg.content.startsWith(config.command_prefix))	return;
+  	if (msg.content.indexOf(" ") === 1 && msg.content.length > 2) msg.content = msg.content.replace(" ", "");
+  	let cmd = msg.content.split(" ")[0].substring(1).toLowerCase();
+  	let suffix = msg.content.substring(cmd.length + 2).trim();
+  	if (msg.content.startsWith(config.command_prefix)) {
+  		if (commands.hasOwnProperty(cmd)) {
+  			if (!msg.channel.isPrivate)
+  			execCommand(msg, cmd, suffix);
+  		}
+  	}
 });
 
-DBots[1].on("ready", function(){
-  availableAccounts++
-  console.log("[info] Bot 2 logged in as " + DBots[1].user.name + "#" + DBots[1].user.discriminator + " (" + DBots[1].user.id + ")")
-});
+/* COMMANDS | START */
+var commands = {
+  "help": {
+    desc: "Sends a PM with all commands that can be used",
+    usage: "[command]",
+    deleteCommand: true, shouldDisplay: false, cooldown: 1,
+    process: function(DBots, msg, suffix) {
+      let toSend = [];
+      if (!suffix) {
+        toSend.push("Use `" + config.command_prefix + "help <command name>` to get more info on a command.\n");
+        toSend.push("**Commands:**");
+        toSend.push("```glsl\n");
+        Object.keys(commands).forEach(cmd => {
+          if (!commands[cmd].hasOwnProperty("shouldDisplay") || (commands[cmd].hasOwnProperty("shouldDisplay") && commands[cmd].shouldDisplay))
+            toSend.push("\n" + config.command_prefix + cmd + " " + commands[cmd].usage + "\n\t#" + commands[cmd].desc);
+        });
+        toSend = toSend.join('');
+        if (toSend.length >= 1990) {
+          DBots[i].sendMessage(msg.author, toSend.substr(0, 1990).substr(0, toSend.substr(0, 1990).lastIndexOf('\n\t')) + "```"); //part 1
+          setTimeout(() => {DBots[i].sendMessage(msg.author, "```glsl" + toSend.substr(toSend.substr(0, 1990).lastIndexOf('\n\t')) + "```");}, 1000); //2
+        } else DBots[i].sendMessage(msg.author, toSend + "```"); DBots[i].sendMessage(msg, "**" + msg.author.username + "** I have sent you help in PM 📬");
+      } else {
+        suffix = suffix.toLowerCase();
+        if (commands.hasOwnProperty(suffix)) {
+          toSend.push("`" + config.command_prefix + suffix + ' ' + commands[suffix].usage + "`");
+          if (commands[suffix].hasOwnProperty("info")) toSend.push(commands[suffix].info); //if extra info
+          else if (commands[suffix].hasOwnProperty("desc")) toSend.push(commands[suffix].desc); //else usse the desc
+          DBots[i].sendMessage(msg, toSend);
+        } else
+          DBots[i].sendMessage(msg, "Command `" + suffix + "` not found.", (erro, wMessage) => { DBots[i].deleteMessage(wMessage, {"wait": 10000}); });
+      }
+    }
+  },
+  "restart": {
+		desc: "Restart the bots to say something different", usage: "<sentence|word>",
+		process: function (DBots, msg, suffix) {
+      if (msg.channel.permissionsOf(msg.author).hasPermission("manageServer")) {
+      var nexttext = msg.content.substring(8).trim();
+          CBots = [new Cleverbot,new Cleverbot,new Cleverbot,new Cleverbot];
+      if(nexttext.length == 0) {
+        nexttext = lastMessage;
+      } else {
+        lastMessage = nexttext;
+      }
+      newtext = nexttext;
+    } else DBots[i].sendMessage(msg, "⚠ Access Denied `Permission Required - manageServer`");
+		}
+	},
+  "checkhost": {
+		desc: "Checks who is hosting", usage: "",
+		process: function (DBots, msg, suffix) {
+      DBots[i].sendMessage(msg.channel, config.host)
+		}
+	},
+  "vote": {
+		desc: "Vote to restart the bots", usage: "",
+		process: function (DBots, msg, suffix) {
+      if (votes == config.voteThreshold){
+        newtext = lastMessage;
+        voters = [];
+        votes = 0;
+        CBots = [new Cleverbot,new Cleverbot,new Cleverbot,new Cleverbot];
+        DBots[i].sendMessage(msg.channel, "Cleverbutts *should* be restarted.")
+      }
+      if (voters.includes(msg.sender.id)) {
+        DBots[i].sendMessage(msg.channel, "You have already voted!")
+      } else {
+        var remainingvotes = config.voteThreshold - votes;
+        voters.push(msg.sender.id);
+        DBots[i].sendMessage(msg.channel, "**" + remainingvotes + "** more votes are required to restart.");
+        ++votes
+      }
+		}
+	},
+  "shutdown": {
+		desc: "Turns off the bots (and reboots if using script)", usage: "<sentence|word>",
+		process: function (DBots, msg, suffix) {
+      var startMSG = msg.content.substring(15,2000).trim();
+      if(startMSG.length == 0){
+      startMSG = lastMessage;
+      } else {
+      lastMessage = startMSG;
+      }
+      if (msg.channel.permissionsOf(msg.author).hasPermission("manageServer")) {
+        if(startMSG != ""){
+          fs.readFile("./config.json", "utf8" , function(err,ctx){
+            var parts = ctx.split(config.startMessage)
+              fs.writeFile("./config.json", parts[0] + startMSG + parts[1], function(){
+                process.exit()
+              });
+            });
+          }
+          else{
+            process.exit()
+          }
+        } else DBots[i].sendMessage(msg, "⚠ Access Denied `Permission Required - manageServer`");
+		}
+	}
+}
+/* COMMANDS | END */
 
-DBots[2].on("ready", function(){
-  availableAccounts++
-  console.log("[info] Bot 3 logged in as " + DBots[2].user.name + "#" + DBots[2].user.discriminator + " (" + DBots[2].user.id + ")")
-});
+function execCommand(msg, cmd, suffix, type = "normal") {
+try {
+	commandsProcessed += 1;
+		if (type == "normal") {
+      commands[cmd].process(DBots, msg, suffix);
+    }
+	} catch (err) { console.log(err.stack); }
+}
 
-DBots[3].on("ready", function(){
-  availableAccounts++
-  console.log("[info] Bot 4 logged in as " + DBots[3].user.name + "#" + DBots[3].user.discriminator + " (" + DBots[3].user.id + ")")
-});
 
-DBots[4].on("ready", function(){
-  availableAccounts++
-  console.log("[info] Bot 5 logged in as " + DBots[4].user.name + "#" + DBots[4].user.discriminator + " (" + DBots[4].user.id + ")")
-});
+/* IGNORE THIS PART IF YOU DON*T KNOW WHAT YOU'RE DOING */
+if (config.bot1){
+  DBots[0].on("ready", function(){console.log("[info] Bot 1 logged in as " + DBots[0].user.name + "#" + DBots[0].user.discriminator + " (" + DBots[0].user.id + ")")});
+  DBots[0].loginWithToken(config.bot1);
+} else return;
 
-DBots[0].loginWithToken(config.bot1);
-DBots[1].loginWithToken(config.bot2);
-DBots[2].loginWithToken(config.bot3);
-DBots[3].loginWithToken(config.bot4);
-DBots[4].loginWithToken(config.bot5);
+if (config.bot2){
+  DBots[1].on("ready", function(){console.log("[info] Bot 2 logged in as " + DBots[1].user.name + "#" + DBots[1].user.discriminator + " (" + DBots[1].user.id + ")")});
+  DBots[1].loginWithToken(config.bot2);
+} else return;
+
+if (config.bot3){
+  DBots[2].on("ready", function(){console.log("[info] Bot 3 logged in as " + DBots[2].user.name + "#" + DBots[2].user.discriminator + " (" + DBots[2].user.id + ")")});
+  DBots[2].loginWithToken(config.bot3);
+} else return;
+
+if (config.bot4){
+  DBots[3].on("ready", function(){console.log("[info] Bot 4 logged in as " + DBots[3].user.name + "#" + DBots[3].user.discriminator + " (" + DBots[3].user.id + ")")});
+  DBots[3].loginWithToken(config.bot4);
+} else return;
+
+if (config.bot5){
+  DBots[4].on("ready", function(){console.log("[info] Bot 5 logged in as " + DBots[4].user.name + "#" + DBots[4].user.discriminator + " (" + DBots[4].user.id + ")")});
+  DBots[4].loginWithToken(config.bot5);
+} else return;
+
+exports.commands = commands;
