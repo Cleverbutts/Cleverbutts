@@ -2,7 +2,6 @@ var Cleverbot = require('cleverbot-node')
     , Discordbot = require("discord.js")
     , fs = require("fs")
     , config = require("./config.json")
-    , utils = require("./utils.js")
     , DBots = [new Discordbot.Client(),new Discordbot.Client(),new Discordbot.Client(),new Discordbot.Client(),new Discordbot.Client()]
     , randombot = Math.floor(Math.random() * config.bots_hosting)
     , newtext = undefined
