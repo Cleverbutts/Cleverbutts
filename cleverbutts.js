@@ -1,3 +1,4 @@
+"use strict";
 var Cleverbot = require('cleverbot-node')
     , Discordbot = require("discord.js")
     , fs = require("fs")
