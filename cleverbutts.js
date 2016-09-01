@@ -1,4 +1,3 @@
-"use strict";
 var Cleverbot = require('cleverbot-node')
     , Discordbot = require("discord.js")
     , fs = require("fs")
@@ -173,11 +172,6 @@ if (config.bot3){
 if (config.bot4){
   DBots[3].on("ready", function(){console.log("[info] Bot 4 logged in as " + DBots[3].user.name + "#" + DBots[3].user.discriminator + " (" + DBots[3].user.id + ")")});
   DBots[3].loginWithToken(config.bot4);
-} else return;
-
-if (config.bot5){
-  DBots[4].on("ready", function(){console.log("[info] Bot 5 logged in as " + DBots[4].user.name + "#" + DBots[4].user.discriminator + " (" + DBots[4].user.id + ")")});
-  DBots[4].loginWithToken(config.bot5);
 } else return;
 
 exports.commands = commands;
