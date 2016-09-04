@@ -19,10 +19,10 @@ var i = 0, callback = function callback(resp) {
   setTimeout(function (str1, str2) {
     DBots[i].startTyping(config.botChannel);
     var toWrite = resp['message'];
-  		if (newtext) {
+    if (newtext) {
       toWrite = newtext;
       newtext = undefined;
-  		}
+    }
     CBots[i].write(toWrite, callback);
 
     DBots[i = ((i + 1) % DBots.length)].sendMessage(config.botChannel, toWrite);
@@ -42,10 +42,10 @@ DBots[i].on("message", (msg) => {
   let cmd = msg.content.split(" ")[0].substring(1).toLowerCase();
   let suffix = msg.content.substring(cmd.length + 2).trim();
   if (msg.content.startsWith(config.command_prefix)) {
-  		if (commands.hasOwnProperty(cmd)) {
+    if (commands.hasOwnProperty(cmd)) {
       if (!msg.channel.isPrivate)
         execCommand(msg, cmd, suffix);
-  		}
+    }
   }
 });
 
