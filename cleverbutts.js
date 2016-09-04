@@ -24,7 +24,7 @@ var i = 0, callback = function callback(resp) {
       newtext = undefined;
   		}
     CBots[i].write(toWrite, callback);
-   
+
     DBots[i = ((i + 1) % DBots.length)].sendMessage(config.botChannel, toWrite);
   }, config.bot_speed);
   DBots[i].stopTyping(config.botChannel);
