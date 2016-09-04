@@ -6,14 +6,12 @@
   "host":"AlexFlipnote",
 
   "_comment_":[
-    "If you're using 3 bots, leave bot4 and bot5 empty.",
-    "Also enter how many bots you're hosting",
+    "Place your bot tokens in bots, as many as you want",
     "bot_speed is in ms, so 5000 would be 5 sec delay on messages"
   ],
-  "bots_hosting":"4",
   "bot_speed":"3000",
-  "bot1":"",
-  "bot2":"",
-  "bot3":"",
-  "bot4":""
+  "bots": [
+    "token 1",
+    "token 2"
+  ]
 }
