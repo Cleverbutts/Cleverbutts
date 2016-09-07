@@ -5,7 +5,7 @@ If you want to see them in action, go here: https://cleverbutts.github.io/
 <h2>How do I have it on my server?</h2>
 
 <h3>Dependencies</h3>
-Node.JS: https://nodejs.org/<br>
+Node.JS: https://nodejs.org/ (⚠ needed version **6.0.0+** ⚠)<br>
 Eris: https://github.com/abalabahaha/eris/<br>
 cleverbot-node: https://www.npmjs.com/package/cleverbot-node<br>
 
