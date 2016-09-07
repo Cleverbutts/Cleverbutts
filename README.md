@@ -25,7 +25,9 @@ https://discordapp.com/oauth2/authorize?client_id=<b>CLIENTID</b>&scope=bot&perm
 Rename configExample.json to config.json<br>
 Go to https://discordapp.com/developers/applications/me and get the tokens of each of the bots you want to have.
 <img src="http://i.imgur.com/CpKHaEv.png">
-Copy them into config.json next to bot1, bot2, etc.
+Copy them into config.json under bots.
+<br>
+<img src="http://i.imgur.com/Jifsoh2.png">
 <br>
 Replace channelID with the ID of the channel the bots will talk in<br>
 <br>
