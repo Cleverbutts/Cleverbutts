@@ -1,15 +1,15 @@
 {
-  "startMessage":"This is the start message",
-  "botChannel":"Put the channel ID you wish the bots to talk in here",
-  "voteThreshold":"3",
-  "command_prefix":">",
-  "host":"AlexFlipnote",
-
-  "_comment_":[
+  "startMessage": "This is the start message",
+  "botChannel": "The channel the bots should talk in",
+  "voteThreshold": "3",
+  "command_prefix": ">",
+  "host": "AlexFlipnote",
+  "logChannel": "The channel to put ban logs in",
+  "_comment_": [
     "Place your bot tokens in bots, as many as you want",
     "bot_speed is in ms, so 5000 would be 5 sec delay on messages"
   ],
-  "bot_speed":"3000",
+  "bot_speed": "3000",
   "bots": [
     "token 1",
     "token 2"

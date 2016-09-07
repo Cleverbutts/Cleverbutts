@@ -1,5 +1,6 @@
 var Cleverbot = require('cleverbot-node')
-  , Discordbot = require("discord.js")
+  // , Discordbot = require("discord.js")
+  , Eris = require('eris')
   , fs = require("fs")
   , config = require("./config.json")
   , DBots = []
@@ -10,40 +11,58 @@ var Cleverbot = require('cleverbot-node')
   , voters = []
   , votes = 0;
 
+var botNum = 0
 for (var ii = 0; ii < config.bots.length; ii++) {
-  DBots.push(new Discordbot.Client())
+  DBots.push(new Eris.Client(config.bots[ii]))
+  DBots[ii].on("ready", function () {
+    if (++botNum == DBots.length) {
+      ready()
+    }
+  });
+  DBots[ii].connect();
   CBots.push(new Cleverbot)
+}
+
+function ready() {
+  for (var ii = 0; ii < DBots.length; ii++) {
+    console.log("[info] Bot " + ii + " logged in as " + DBots[ii].user.username
+      + "#" + DBots[ii].user.discriminator + " (" + DBots[ii].user.id + ")");
+  }
+  Cleverbot.prepare(function () {
+    lastMessage = config.startMessage; callback({ message: config.startMessage })
+  });
 }
 
 var i = 0, callback = function callback(resp) {
   setTimeout(function (str1, str2) {
-    DBots[i].startTyping(config.botChannel);
+    DBots[i].sendChannelTyping(config.botChannel);
     var toWrite = resp['message'];
     if (newtext) {
       toWrite = newtext;
       newtext = undefined;
     }
     CBots[i].write(toWrite, callback);
+    // console.log(config.botChannel, toWrite);
 
-    DBots[i = ((i + 1) % DBots.length)].sendMessage(config.botChannel, toWrite);
+    //   console.log(i)
+    //  console.log(DBots[i].user.username)
+    DBots[i = ((i + 1) % DBots.length)].createMessage(config.botChannel, toWrite).catch(err => console.log(err));
   }, config.bot_speed);
-  DBots[i].stopTyping(config.botChannel);
 };
 
 var commandsProcessed = 0, talkedToTimes = 0;
 
-Cleverbot.prepare(function () {
-  lastMessage = config.startMessage; callback({ message: config.startMessage })
-});
 
-DBots[i].on("message", (msg) => {
+
+
+DBots[i].on("messageCreate", (msg) => {
   if (!msg.content.startsWith(config.command_prefix)) return;
   if (msg.content.indexOf(" ") === 1 && msg.content.length > 2) msg.content = msg.content.replace(" ", "");
   let cmd = msg.content.split(" ")[0].substring(1).toLowerCase();
   let suffix = msg.content.substring(cmd.length + 2).trim();
   if (msg.content.startsWith(config.command_prefix)) {
     if (commands.hasOwnProperty(cmd)) {
-      if (!msg.channel.isPrivate)
+      if (!(msg.channel instanceof Eris.PrivateChannel))
         execCommand(msg, cmd, suffix);
     }
   }
@@ -66,41 +85,50 @@ var commands = {
             toSend.push("\n" + config.command_prefix + cmd + " " + commands[cmd].usage + "\n\t#" + commands[cmd].desc);
         });
         toSend = toSend.join('');
-        if (toSend.length >= 1990) {
-          DBots[i].sendMessage(msg.author, toSend.substr(0, 1990).substr(0, toSend.substr(0, 1990).lastIndexOf('\n\t')) + "```"); //part 1
-          setTimeout(() => { DBots[i].sendMessage(msg.author, "```glsl" + toSend.substr(toSend.substr(0, 1990).lastIndexOf('\n\t')) + "```"); }, 1000); //2
-        } else DBots[i].sendMessage(msg.author, toSend + "```"); DBots[i].sendMessage(msg, "**" + msg.author.username + "** I have sent you help in PM 📬");
+        DBots[i].getDMChannel(msg.author.id).then(pc => {
+          if (toSend.length >= 1990) {
+            DBots[i].createMessage(pc.id, toSend.substr(0, 1990).substr(0, toSend.substr(0, 1990).lastIndexOf('\n\t')) + "```"); //part 1
+            setTimeout(() => { DBots[i].createMessage(pc.id, "```glsl" + toSend.substr(toSend.substr(0, 1990).lastIndexOf('\n\t')) + "```"); }, 1000); //2
+          } else DBots[i].createMessage(pc.id, toSend + "```"); DBots[i].createMessage(msg.channel.id, "**" + msg.author.username + "** I have sent you help in PM 📬");
+        })
       } else {
         suffix = suffix.toLowerCase();
         if (commands.hasOwnProperty(suffix)) {
           toSend.push("`" + config.command_prefix + suffix + ' ' + commands[suffix].usage + "`");
           if (commands[suffix].hasOwnProperty("info")) toSend.push(commands[suffix].info); //if extra info
           else if (commands[suffix].hasOwnProperty("desc")) toSend.push(commands[suffix].desc); //else usse the desc
-          DBots[i].sendMessage(msg, toSend);
+          DBots[i].createMessage(msg.channel.id, toSend);
         } else
-          DBots[i].sendMessage(msg, "Command `" + suffix + "` not found.", (erro, wMessage) => { DBots[i].deleteMessage(wMessage, { "wait": 10000 }); });
+          DBots[i].createMessage(msg.channel.id, "Command `" + suffix + "` not found.").then(wMessage => {
+            setTimeout(() => {
+              DBots[i].deleteMessage(wMessage.channel.id, wMessage.id);
+            }, 10000)
+          });
       }
     }
   },
   "restart": {
     desc: "Restart the bots to say something different", usage: "<sentence|word>",
     process: function (DBots, msg, suffix) {
-      if (msg.channel.permissionsOf(msg.author).hasPermission("manageServer")) {
+      if (msg.channel.permissionsOf(msg.author.id).json["manageGuild"]) {
         var nexttext = msg.content.substring(8).trim();
-        CBots = [new Cleverbot, new Cleverbot, new Cleverbot, new Cleverbot];
+        CBots.length = 0;
+        for (var ii = 0; ii < DBots.length; ii++) {
+          CBots.push(new Cleverbot);
+        }
         if (nexttext.length == 0) {
           nexttext = lastMessage;
         } else {
           lastMessage = nexttext;
         }
         newtext = nexttext;
-      } else DBots[i].sendMessage(msg, "⚠ Access Denied `Permission Required - manageServer`");
+      } else DBots[i].createMessage(msg.channel.id, "⚠ Access Denied `Permission Required - manageServer`");
     }
   },
   "checkhost": {
     desc: "Checks who is hosting", usage: "",
     process: function (DBots, msg, suffix) {
-      DBots[i].sendMessage(msg.channel, config.host)
+      DBots[i].createMessage(msg.channel.id, config.host)
     }
   },
   "vote": {
@@ -110,15 +138,19 @@ var commands = {
         newtext = lastMessage;
         voters = [];
         votes = 0;
-        CBots = [new Cleverbot, new Cleverbot, new Cleverbot, new Cleverbot];
-        DBots[i].sendMessage(msg.channel, "Cleverbutts *should* be restarted.")
+        CBots.length = 0;
+        for (var ii = 0; ii < DBots.length; ii++) {
+          CBots.push(new Cleverbot);
+        }
+        DBots[i].createMessage(msg.channel.id, "Cleverbutts *should* be restarted.")
       }
-      if (voters.includes(msg.sender.id)) {
-        DBots[i].sendMessage(msg.channel, "You have already voted!")
+      if (voters.includes(msg.author.id)) {
+        DBots[i].createMessage(msg.channel.id, "You have already voted!")
       } else {
         var remainingvotes = config.voteThreshold - votes;
-        voters.push(msg.sender.id);
-        DBots[i].sendMessage(msg.channel, "**" + remainingvotes + "** more votes are required to restart.");
+        voters.push(msg.author.id);
+        //console.log(i)
+        DBots[i].createMessage(msg.channel.id, "**" + remainingvotes + "** more votes are required to restart.");
         ++votes
       }
     }
@@ -132,7 +164,7 @@ var commands = {
       } else {
         lastMessage = startMSG;
       }
-      if (msg.channel.permissionsOf(msg.author).hasPermission("manageServer")) {
+      if (msg.channel.permissionsOf(msg.author.id).json["manageGuild"]) {
         if (startMSG != "") {
           fs.readFile("./config.json", "utf8", function (err, ctx) {
             var parts = ctx.split(config.startMessage)
@@ -144,11 +176,13 @@ var commands = {
         else {
           process.exit()
         }
-      } else DBots[i].sendMessage(msg, "⚠ Access Denied `Permission Required - manageServer`");
+      } else DBots[i].createMessage(msg.channel.id, "⚠ Access Denied `Permission Required - manageServer`");
     }
   }
 }
+
 /* COMMANDS | END */
+
 
 function execCommand(msg, cmd, suffix, type = "normal") {
   try {
@@ -159,12 +193,22 @@ function execCommand(msg, cmd, suffix, type = "normal") {
   } catch (err) { console.log(err.stack); }
 }
 
+DBots[i].on("guildBanAdd", function (guild, user) {
+  if (config.hasOwnProperty('logChannel')) {
+    if (guild.id === DBots[i].guilds.get(DBots[i].channelGuildMap[config.logChannel]).id) {
+      DBots[i].createMessage(config.logChannel, "🔨 " + user.username
+        + "#" + user.discriminator + " (" + user.id + ") was banned.")
+    }
+  }
+})
 
-/* IGNORE THIS PART IF YOU DON*T KNOW WHAT YOU'RE DOING */
-var botNum = -1
-for (var ii = 0; ii < DBots.length; ii++) {
-  DBots[ii].on("ready", function () { botNum++; console.log("[info] Bot " + botNum + " logged in as " + DBots[botNum].user.name + "#" + DBots[botNum].user.discriminator + " (" + DBots[botNum].user.id + ")") });
-  DBots[ii].loginWithToken(config.bots[ii]);
-}
+DBots[i].on("guildBanRemove", function (guild, user) {
+  if (config.hasOwnProperty('logChannel')) {
+    if (guild.id === DBots[i].guilds.get(DBots[i].channelGuildMap[config.logChannel]).id) {
+      DBots[i].createMessage(config.logChannel, "🍪 " + user.username
+        + "#" + user.discriminator + " (" + user.id + ") was unbanned.")
+    }
+  }
+})
 
 exports.commands = commands;
