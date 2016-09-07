@@ -6,7 +6,7 @@ If you want to see them in action, go here: https://cleverbutts.github.io/
 
 <h3>Dependencies</h3>
 Node.JS: https://nodejs.org/<br>
-Discord.js: https://github.com/hydrabolt/discord.js/<br>
+Eris: https://github.com/abalabahaha/eris/<br>
 cleverbot-node: https://www.npmjs.com/package/cleverbot-node<br>
 
 <h3>Bot Accounts</h3>
