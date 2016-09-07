@@ -1,0 +1,12 @@
+{
+  "name": "Cleverbutts",
+  "private": false,
+  "devDependencies": {},
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "dependencies": {
+    "Eris": "abalabahaha/eris#master",
+    "cleverbot-node": "^0.2.2"
+  }
+}
