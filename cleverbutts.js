@@ -13,7 +13,7 @@ var Cleverbot = require('cleverbot-node')
 
 var botNum = 0
 for (var ii = 0; ii < config.bots.length; ii++) {
-  DBots.push(new Eris.Client(config.bots[ii]))
+  DBots.push(new Eris.Client("Bot " + config.bots[ii]))
   DBots[ii].on("ready", function () {
     if (++botNum == DBots.length) {
       ready()
