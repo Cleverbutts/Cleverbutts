@@ -70,35 +70,37 @@ var commands = {
     usage: "[command]",
     deleteCommand: true, shouldDisplay: false, cooldown: 1,
     process: function (DBots, msg, suffix) {
-      let toSend = [];
-      if (!suffix) {
-        toSend.push("Use `" + config.command_prefix + "help <command name>` to get more info on a command.\n");
-        toSend.push("**Commands:**");
-        toSend.push("```glsl\n");
-        Object.keys(commands).forEach(cmd => {
-          if (!commands[cmd].hasOwnProperty("shouldDisplay") || (commands[cmd].hasOwnProperty("shouldDisplay") && commands[cmd].shouldDisplay))
-            toSend.push("\n" + config.command_prefix + cmd + " " + commands[cmd].usage + "\n\t#" + commands[cmd].desc);
-        });
-        toSend = toSend.join('');
-        DBots[i].getDMChannel(msg.author.id).then(pc => {
-          if (toSend.length >= 1990) {
-            DBots[i].createMessage(pc.id, toSend.substr(0, 1990).substr(0, toSend.substr(0, 1990).lastIndexOf('\n\t')) + "```"); //part 1
-            setTimeout(() => { DBots[i].createMessage(pc.id, "```glsl" + toSend.substr(toSend.substr(0, 1990).lastIndexOf('\n\t')) + "```"); }, 1000); //2
-          } else DBots[i].createMessage(pc.id, toSend + "```"); DBots[i].createMessage(msg.channel.id, "**" + msg.author.username + "** I have sent you help in PM 📬");
-        })
-      } else {
-        suffix = suffix.toLowerCase();
-        if (commands.hasOwnProperty(suffix)) {
-          toSend.push("`" + config.command_prefix + suffix + ' ' + commands[suffix].usage + "`");
-          if (commands[suffix].hasOwnProperty("info")) toSend.push(commands[suffix].info); //if extra info
-          else if (commands[suffix].hasOwnProperty("desc")) toSend.push(commands[suffix].desc); //else usse the desc
-          DBots[i].createMessage(msg.channel.id, toSend);
-        } else
-          DBots[i].createMessage(msg.channel.id, "Command `" + suffix + "` not found.").then(wMessage => {
-            setTimeout(() => {
-              DBots[i].deleteMessage(wMessage.channel.id, wMessage.id);
-            }, 10000)
+      if (msg.channel.guild.id == DBots[i].channelGuildMap[config.botChannel]) {
+        let toSend = [];
+        if (!suffix) {
+          toSend.push("Use `" + config.command_prefix + "help <command name>` to get more info on a command.\n");
+          toSend.push("**Commands:**");
+          toSend.push("```glsl\n");
+          Object.keys(commands).forEach(cmd => {
+            if (!commands[cmd].hasOwnProperty("shouldDisplay") || (commands[cmd].hasOwnProperty("shouldDisplay") && commands[cmd].shouldDisplay))
+              toSend.push("\n" + config.command_prefix + cmd + " " + commands[cmd].usage + "\n\t#" + commands[cmd].desc);
           });
+          toSend = toSend.join('');
+          DBots[i].getDMChannel(msg.author.id).then(pc => {
+            if (toSend.length >= 1990) {
+              DBots[i].createMessage(pc.id, toSend.substr(0, 1990).substr(0, toSend.substr(0, 1990).lastIndexOf('\n\t')) + "```"); //part 1
+              setTimeout(() => { DBots[i].createMessage(pc.id, "```glsl" + toSend.substr(toSend.substr(0, 1990).lastIndexOf('\n\t')) + "```"); }, 1000); //2
+            } else DBots[i].createMessage(pc.id, toSend + "```"); DBots[i].createMessage(msg.channel.id, "**" + msg.author.username + "** I have sent you help in PM 📬");
+          })
+        } else {
+          suffix = suffix.toLowerCase();
+          if (commands.hasOwnProperty(suffix)) {
+            toSend.push("`" + config.command_prefix + suffix + ' ' + commands[suffix].usage + "`");
+            if (commands[suffix].hasOwnProperty("info")) toSend.push(commands[suffix].info); //if extra info
+            else if (commands[suffix].hasOwnProperty("desc")) toSend.push(commands[suffix].desc); //else usse the desc
+            DBots[i].createMessage(msg.channel.id, toSend);
+          } else
+            DBots[i].createMessage(msg.channel.id, "Command `" + suffix + "` not found.").then(wMessage => {
+              setTimeout(() => {
+                DBots[i].deleteMessage(wMessage.channel.id, wMessage.id);
+              }, 10000)
+            });
+        }
       }
     }
   },
@@ -107,9 +109,8 @@ var commands = {
     process: function (DBots, msg, suffix) {
       if (msg.channel.permissionsOf(msg.author.id).json["manageGuild"]) {
         var nexttext = msg.content.substring(8).trim();
-        CBots.length = 0;
-        for (var ii = 0; ii < DBots.length; ii++) {
-          CBots.push(new Cleverbot);
+        for (var ii = 0; ii < CBots.length; ii++) {
+          CBots[ii] = new Cleverbot;
         }
         if (nexttext.length == 0) {
           nexttext = lastMessage;
