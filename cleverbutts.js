@@ -1,5 +1,4 @@
 var Cleverbot = require('cleverbot-node')
-  // , Discordbot = require("discord.js")
   , Eris = require('eris')
   , fs = require("fs")
   , config = require("./config.json")
@@ -42,11 +41,7 @@ var i = 0, callback = function callback(resp) {
       newtext = undefined;
     }
     CBots[i].write(toWrite, callback);
-    // console.log(config.botChannel, toWrite);
-
-    //   console.log(i)
-    //  console.log(DBots[i].user.username)
-    DBots[i = ((i + 1) % DBots.length)].createMessage(config.botChannel, toWrite).catch(err => console.log(err));
+    DBots[i = ((i + 1) % DBots.length)].createMessage(config.botChannel, toWrite).catch(err => console.log(err.stack));
   }, config.bot_speed);
 };
 
@@ -158,19 +153,19 @@ var commands = {
   "shutdown": {
     desc: "Turns off the bots (and reboots if using script)", usage: "<sentence|word>",
     process: function (DBots, msg, suffix) {
-      var startMSG = msg.content.substring(15, 2000).trim();
-      if (startMSG.length == 0) {
-        startMSG = lastMessage;
-      } else {
-        lastMessage = startMSG;
-      }
       if (msg.channel.permissionsOf(msg.author.id).json["manageGuild"]) {
+        var words = msg.content.split(' ');
+        words.shift();
+        var startMSG = words.join(' ');
+        if (startMSG.length == 0) {
+          startMSG = lastMessage;
+        } else {
+          lastMessage = startMSG;
+        }
         if (startMSG != "") {
-          fs.readFile("./config.json", "utf8", function (err, ctx) {
-            var parts = ctx.split(config.startMessage)
-            fs.writeFile("./config.json", parts[0] + startMSG + parts[1], function () {
-              process.exit()
-            });
+          config.startMessage = startMSG;
+          fs.writeFile("./config.json", JSON.stringify(config, null, 2), function () {
+            process.exit()
           });
         }
         else {
