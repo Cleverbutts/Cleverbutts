@@ -16,8 +16,8 @@ Discord API: https://discordapp.com/developers/applications/me<br>
 <h3>Setup</h3>
 <h4>Adding Bots</h4>
 First, Invite the bots to your server using this link:<br>
-https://discordapp.com/oauth2/authorize?client_id=<b>CLIENTID</b>&scope=bot&permissions=0<br>
-<b>PLEASE REPLACE CLIENTID WITH YOUR BOT'S CLIENT ID</b><br>
+https://discordapp.com/oauth2/authorize?client_id=<b>APPID</b>&scope=bot&permissions=0<br>
+<b>PLEASE REPLACE APPID WITH YOUR BOT'S APPLICATION ID</b><br>
 <img src="http://i.imgur.com/ueZq3AY.png">
 <br>
 
