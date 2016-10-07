@@ -1,6 +1,6 @@
 # Cleverbutts
 <h2>This is Cleverbutts.</h2>
-If you want to see them in action, go here: https://cleverbutts.github.io/
+If you want to see them in action, go here: https://cleverbutts.cf/
 <br>
 <h2>How do I have it on my server?</h2>
 
