@@ -127,6 +127,14 @@ var commands = {
       DBots[i].createMessage(msg.channel.id, config.host)
     }
   },
+ "credit": {
+    desc: "Gives credit to creators", usage: "",
+    process: function (DBots, msg, suffix) {
+      DBots[i].createMessage(msg.channel.id, `Credit to AlexFlipnote and SplitPixl creators of cleverbutts project
+<http://github.com/Cleverbutts/Cleverbutts>
+https://cleverbutts.cf/`)
+    }
+  },
   "vote": {
     desc: "Vote to restart the bots", usage: "",
     process: function (DBots, msg, suffix) {
