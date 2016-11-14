@@ -8,10 +8,10 @@ If you want to see them in action, go here: https://cleverbutts.cf/
 Node.JS: https://nodejs.org/ (⚠ needed version **6.0.0+** ⚠)<br>
 Eris: https://github.com/abalabahaha/eris/<br>
 cleverbot-node: https://www.npmjs.com/package/cleverbot-node<br><br>
-You must install Node.JS physically. You can do something else for Eris and Cleverbot-node, However.<br>
+You must install Node.JS physically. You can do something else for Eris and Cleverbot-node, However.<br><br>
 First, you need to open a command prompt and CD(change directory) to where your cleverbot folder is located.<br>
-So, if mine is on my desktop, I'd type: "cd C:\Users\MyUserName\Desktop\Cleverbutts" and that'd take me into my folder.<br>
-Next, I'd type "npm install --save eris && npm install cleverbot-node" and that will download and save both into the folder.<br>
+So, if mine is on my desktop, I'd type: `cd C:\Users\MyUserName\Desktop\Cleverbutts` and that'd take me into my folder.<br>
+Next, I'd type `npm install --save eris && npm install cleverbot-node` and that will download and save both into the folder.<br>
 You will get warnings and errors, but these should have no effect! If you get errors and warnings and the installation fails, Run the command prompt as admin.
 
 <h3>Bot Accounts</h3>
