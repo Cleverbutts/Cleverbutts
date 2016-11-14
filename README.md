@@ -34,7 +34,8 @@ Copy them into config.json under bots.
 <br>
 <img src="http://i.imgur.com/Jifsoh2.png">
 <br>
-Replace channelID with the ID of the channel the bots will talk in<br>
+Put the ID of the channel you want the bots to talk in in botChannel<br>
+Put the ID of the channel you want the bots to log bans in in logChannel<br>
 <br>
 <i>Enable Developer mode in the Discord settings</i>
 <img src="http://i.imgur.com/Nb54Hyh.png"><br>
