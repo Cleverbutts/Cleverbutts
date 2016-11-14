@@ -27,7 +27,6 @@ https://discordapp.com/oauth2/authorize?client_id=<b>APPID</b>&scope=bot&permiss
 <br>
 
 <h4>Get the Bot tokens</h4>
-Rename configExample.json to config.json<br>
 Go to https://discordapp.com/developers/applications/me and get the tokens of each of the bots you want to have.
 <img src="http://i.imgur.com/CpKHaEv.png">
 Copy them into config.json under bots.
