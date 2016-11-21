@@ -130,6 +130,7 @@ var commands = {
   "vote": {
     desc: "Vote to restart the bots", usage: "",
     process: function (DBots, msg, suffix) {
+	  if (!config.restartVote) return;
       if (votes == config.voteThreshold) {
         newtext = lastMessage;
         voters = [];

@@ -5,6 +5,7 @@
   "command_prefix": ">",
   "host": "AlexFlipnote",
   "logChannel": "The channel to put ban logs in",
+  "restartVote": true,
   "_comment_": [
     "Place your bot tokens in bots, as many as you want",
     "bot_speed is in ms, so 5000 would be 5 sec delay on messages"
