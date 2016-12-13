@@ -1,7 +1,13 @@
 {
   "name": "Cleverbutts",
   "private": false,
-  "devDependencies": {},
+  "devDependencies": {
+    "electron": "^1.4.1"
+  },
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
   "engines": {
     "node": ">=6.0.0"
   },
