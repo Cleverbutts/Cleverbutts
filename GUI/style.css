@@ -1,0 +1,25 @@
+body {
+  background-color: #45669b;
+  font-family: arial;
+}
+
+.title {
+  margin: 5em 0 0 0;
+  color: #fff;
+  display: block;
+  text-align: center;
+  text-shadow: 2px 2px #000000;
+  font-size: 2em;
+}
+
+.title::before {
+  content: 'Cleverbutts Panel'
+}
+
+.container {
+  margin: 1em auto auto auto;
+  width: 40em;
+  height: 10em;
+  background-color: #fff;
+  box-shadow: 2px 2px 5px #000000;
+}
