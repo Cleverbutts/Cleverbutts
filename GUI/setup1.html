@@ -1,0 +1,34 @@
+<html>
+<head>
+  <title>Cleverbutts GUI</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+</head>
+<body>
+  <center>
+    <br>
+    <h1 class="title2">Add a bot</h1>
+    <br>
+    <input type="text" id="token"></input><br><br>
+    <div id=info></div><br>
+    <a href="#" class="button" onclick="checkBot()" id="next">Login <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+    <script>
+    var request = require('request');
+    function checkBot(){
+      document.getElementById("info").innerHTML = "Logging in..."
+      var options = {
+        url: 'https://discordapp.com/api/users/@me',
+        headers: {
+          'Authorization': 'Bot ' + document.getElementById("token").value
+        }
+      };
+      request(options, function(error, response, body){
+        body = JSON.parse(body)
+          document.getElementById("info").innerHTML = `<img src="https://cdn.discordapp.com/avatars/${body.id}/${body.avatar}" class="circle"><h3 class="title2">${body.username}#${body.discriminator}</h3>`
+          document.getElementById("next").innerHTML = 'Next <i class="fa fa-arrow-right" aria-hidden="true"></i>'
+      });
+    }
+    </script>
+  </div>
+</body>
+</html>
