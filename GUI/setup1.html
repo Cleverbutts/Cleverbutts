@@ -13,8 +13,13 @@
     <div id=info></div><br>
     <a href="#" class="button" onclick="checkBot()" id="next">Login <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
     <script>
+    var success = false
     var request = require('request');
+    var fs = require("fs");
     function checkBot(){
+      if(success){
+        window.location = "setup2.html"
+      }
       document.getElementById("info").innerHTML = "Logging in..."
       var options = {
         url: 'https://discordapp.com/api/users/@me',
@@ -23,9 +28,15 @@
         }
       };
       request(options, function(error, response, body){
-        body = JSON.parse(body)
+        if(response.statusCode == 200){
+          body = JSON.parse(body)
           document.getElementById("info").innerHTML = `<img src="https://cdn.discordapp.com/avatars/${body.id}/${body.avatar}" class="circle"><h3 class="title2">${body.username}#${body.discriminator}</h3>`
           document.getElementById("next").innerHTML = 'Next <i class="fa fa-arrow-right" aria-hidden="true"></i>'
+          success = true
+          fs.writeFileSync("./bot1.txt", document.getElementById("token").value)
+        } else {
+          document.getElementById("info").innerHTML = "nope"
+        }
       });
     }
     </script>

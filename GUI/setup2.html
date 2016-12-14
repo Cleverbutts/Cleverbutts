@@ -1,0 +1,52 @@
+<html>
+<head>
+  <title>Cleverbutts GUI</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+</head>
+<body>
+  <center>
+    <br>
+    <h1 class="title2">Pick a channel</h1>
+    <br>
+    <div id="servers-parent">
+    <select id="server" onchange="addChannels()">
+      <option selected disabled>Pick a server</option>
+    </select>
+    </div><br><br>
+    <div id="channels-parent"></div><br><br>
+    <div id="next"></div><br>
+    <script>
+    var Eris = require("eris");
+    var fs = require("fs");
+    var bot = new Eris.Client(fs.readFileSync("./bot1.txt", "utf8"))
+    bot.connect();
+
+    bot.on("ready", () => {
+      var servers = ['<option selected disabled>Pick a server</option>']
+      bot.guilds.forEach((guild) => {
+        servers.push(`<option value="${guild.id}">${guild.name}</option>`)
+      })
+      document.getElementById("server").innerHTML = servers.join("")
+    });
+
+    function addChannels() {
+      console.log()
+      document.getElementById("channels-parent").innerHTML = '<select id="channels"><option selected disabled>Pick a channel</option></select>'
+      var channels = ['<option selected disabled>Pick a channel</option>']
+      bot.guilds.get(document.getElementById("server").value).channels.forEach((v) => {
+        if(v.type == "0"){
+          channels.push(`<option value="${v.id}">${v.name}</option>`)
+        }
+      });
+      document.getElementById("channels").innerHTML = channels.join("")
+      document.getElementById("next").innerHTML = '<a href="done.html" class="button" onclick="next()" id="next">Next <i class="fa fa-arrow-right" aria-hidden="true"></i></a>'
+    }
+
+    function next() {
+
+    }
+    </script>
+  </div>
+</body>
+</html>
