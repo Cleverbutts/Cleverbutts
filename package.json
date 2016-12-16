@@ -27,7 +27,8 @@
   "build": {
     "appId": "cf.cleverbutts.cleverbuttsSetup",
     "win": {
-      "target": "squirrel"
+      "target": "squirrel",
+      "iconURL": "https://cleverbutts.cf/assets/images/logo.ico"
     },
     "mac": {
       "target": "default",
