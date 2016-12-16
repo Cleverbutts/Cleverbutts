@@ -1,0 +1,36 @@
+<html>
+<head>
+  <title>Cleverbutts GUI</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <script src="../cb.js"></script>
+</head>
+<body>
+  <center>
+    <br>
+    <img src="https://cleverbutts.cf/assets/images/logo.png" class="circle">
+    <h1 class="title2">Console</h1>
+    <a class="button" id="start" href="#" onClick="toggleBots()" style="">Loading...</i></a>
+    <script>
+    //require("../cb.js")
+    loadBots();
+
+    var running = false
+
+    function toggleBots(){
+      if(running){
+        stop();
+        running = false
+      } else {
+        var button2start = document.getElementById("start")
+        button2start.style["background-color"] = "#7AFB98"
+        button2start.innerHTML = "Starting..."
+        start();
+        running = true
+      }
+    }
+    </script>
+  </div>
+  </center>
+</body>
+</html>

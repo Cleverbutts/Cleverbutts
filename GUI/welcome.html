@@ -9,12 +9,10 @@
     <br>
     <img src="https://cleverbutts.cf/assets/images/logo.png" class="circle">
     <h1 class="title2">Cleverbutts Setup</h1>
-    <a class="button" onclick="" href="setup1.html">Start Setup <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+    <a class="button" href="setup1.html">Start Setup <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
     <script>
     var fs = require("fs");
-    function next() {
-      document.write(fs.readFileSync('./GUI/setup1.html', 'utf8'))
-    }
+    if(fs.existsSync("./config.json")) { window.location = "main.html"; }
     </script>
   </div>
   </center>
