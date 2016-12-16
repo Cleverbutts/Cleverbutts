@@ -7,38 +7,49 @@
 <body>
   <center>
     <br>
-    <h1 class="title2">Add a bot</h1>
-    <br>
-    <input type="text" id="token"></input><br><br>
+    <h1 class="title2">Add your bots</h1>
+    <a href="#" class="button" onclick="bopen('https://discordapp.com/developers/applications/me')" id="next">Discord Applications</a><br><br>
+    <input type="text" id="token1" class="tokenbox" placeholder="Paste a token here."></input><a href="#" class="button2" onclick="checkBot(0)">Log in</i></a> <span class="status"><i class="fa fa-question" aria-hidden="true"></i></span><br><br>
+    <input type="text" id="token2" class="tokenbox" placeholder="Paste a token here."></input><a href="#" class="button2" onclick="checkBot(1)">Log in</i></a> <span class="status"><i class="fa fa-question" aria-hidden="true"></i></span><br><br>
+    <input type="text" id="token3" class="tokenbox" placeholder="Paste a token here."></input><a href="#" class="button2" onclick="checkBot(2)">Log in</i></a> <span class="status"><i class="fa fa-question" aria-hidden="true"></i></span><br><br>
+    <input type="text" id="token4" class="tokenbox" placeholder="Paste a token here."></input><a href="#" class="button2" onclick="checkBot(3)">Log in</i></a> <span class="status"><i class="fa fa-question" aria-hidden="true"></i></span><br><br>
     <div id=info></div><br>
-    <a href="#" class="button" onclick="checkBot()" id="next">Login <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+    <a href="#" class="button" onclick="next()" id="next">Next <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
     <script>
+    var bopen = require("open");
     var success = false
     var request = require('request');
     var fs = require("fs");
-    function checkBot(){
-      if(success){
-        window.location = "setup2.html"
-      }
-      document.getElementById("info").innerHTML = "Logging in..."
+    var tokenshhh = document.getElementsByClassName('tokenbox');
+    var tokens = Array.prototype.slice.call(tokenshhh);
+    var alertshhh = document.getElementsByClassName('status');
+    var alerts = Array.prototype.slice.call(alertshhh);
+    function checkBot(number){
       var options = {
         url: 'https://discordapp.com/api/users/@me',
         headers: {
-          'Authorization': 'Bot ' + document.getElementById("token").value
+          'Authorization': 'Bot ' + tokens[number].value
         }
       };
       request(options, function(error, response, body){
         if(response.statusCode == 200){
           body = JSON.parse(body)
-          document.getElementById("info").innerHTML = `<img src="https://cdn.discordapp.com/avatars/${body.id}/${body.avatar}" class="circle"><h3 class="title2">${body.username}#${body.discriminator}</h3>`
-          document.getElementById("next").innerHTML = 'Next <i class="fa fa-arrow-right" aria-hidden="true"></i>'
-          success = true
-          fs.writeFileSync("./bot1.txt", document.getElementById("token").value)
+          alerts[number].style.color = "#00ff00"
+          alerts[number].innerHTML = '<i class="fa fa-check" aria-hidden="true"></i>'
+
         } else {
-          document.getElementById("info").innerHTML = "nope"
+          alerts[number].style.color = "#ff0000"
+          alerts[number].innerHTML = '<i class="fa fa-times" aria-hidden="true"></i>'
         }
       });
     }
+  function next(){
+    if(loggedIn >= 2){
+      window.location = "setup2.html"
+    } else {
+
+    }
+  }
     </script>
   </div>
 </body>
