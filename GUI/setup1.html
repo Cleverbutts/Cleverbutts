@@ -9,10 +9,10 @@
     <br>
     <h1 class="title2">Add your bots</h1>
     <a href="#" class="button" onclick="bopen('https://discordapp.com/developers/applications/me')" id="next">Discord Applications</a><br><br>
-    <input type="text" id="token1" class="tokenbox" placeholder="Paste a token here."></input><a href="#" class="button2" onclick="checkBot(0)">Log in</i></a> <span class="status"><i class="fa fa-question" aria-hidden="true"></i></span><br><br>
-    <input type="text" id="token2" class="tokenbox" placeholder="Paste a token here."></input><a href="#" class="button2" onclick="checkBot(1)">Log in</i></a> <span class="status"><i class="fa fa-question" aria-hidden="true"></i></span><br><br>
-    <input type="text" id="token3" class="tokenbox" placeholder="Paste a token here."></input><a href="#" class="button2" onclick="checkBot(2)">Log in</i></a> <span class="status"><i class="fa fa-question" aria-hidden="true"></i></span><br><br>
-    <input type="text" id="token4" class="tokenbox" placeholder="Paste a token here."></input><a href="#" class="button2" onclick="checkBot(3)">Log in</i></a> <span class="status"><i class="fa fa-question" aria-hidden="true"></i></span><br><br>
+    <input type="text" id="token1" class="tokenbox" placeholder="Paste a token here."></input><a href="#" class="button2" onclick="checkBot(0)" id="0">Log in</i></a> <span class="status"><i class="fa fa-question" aria-hidden="true"></i></span><br><br>
+    <input type="text" id="token2" class="tokenbox" placeholder="Paste a token here."></input><a href="#" class="button2" onclick="checkBot(1)" id="1">Log in</i></a> <span class="status"><i class="fa fa-question" aria-hidden="true"></i></span><br><br>
+    <input type="text" id="token3" class="tokenbox" placeholder="Paste a token here."></input><a href="#" class="button2" onclick="checkBot(2)" id="2">Log in</i></a> <span class="status"><i class="fa fa-question" aria-hidden="true"></i></span><br><br>
+    <input type="text" id="token4" class="tokenbox" placeholder="Paste a token here."></input><a href="#" class="button2" onclick="checkBot(3)" id="3">Log in</i></a> <span class="status"><i class="fa fa-question" aria-hidden="true"></i></span><br><br>
     <div id=info></div><br>
     <a href="#" class="button" onclick="next()" id="next">Next <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
     <script>
@@ -24,6 +24,8 @@
     var tokens = Array.prototype.slice.call(tokenshhh);
     var alertshhh = document.getElementsByClassName('status');
     var alerts = Array.prototype.slice.call(alertshhh);
+    var loggedIn = 0
+    var botTokens = []
     function checkBot(number){
       var options = {
         url: 'https://discordapp.com/api/users/@me',
@@ -36,7 +38,9 @@
           body = JSON.parse(body)
           alerts[number].style.color = "#00ff00"
           alerts[number].innerHTML = '<i class="fa fa-check" aria-hidden="true"></i>'
-
+          var element = document.getElementById(number);
+          element.innerHTML = "Invite"
+          element.onclick = function () {bopen(`https://discordapp.com/oauth2/authorize?&client_id=${body.id}&scope=bot&permissions=3072`)}
         } else {
           alerts[number].style.color = "#ff0000"
           alerts[number].innerHTML = '<i class="fa fa-times" aria-hidden="true"></i>'
@@ -44,12 +48,30 @@
       });
     }
   function next(){
-    if(loggedIn >= 2){
-      window.location = "setup2.html"
+    tokens.forEach((t) => {
+      if(t.value != "") {
+        botTokens.push(t.value)
+      }
+    });
+    if(botTokens.length > 1){
+      var bill = JSON.stringify(templateJSON);
+      fs.writeFile("./config.json", bill, (err) => {
+        if (err) throw err;
+        window.location = "setup2.html"
+      });
     } else {
-
+      //throw an error
     }
   }
+    var templateJSON = {
+      startMessage: 'This is the start message',
+      botChannel: 'TBD',
+      voteThreshold: '3',
+      command_prefix: '>',
+      restartVote: true,
+      bot_speed: '3000',
+      bots: botTokens
+    }
     </script>
   </div>
 </body>
