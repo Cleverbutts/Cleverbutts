@@ -109,7 +109,8 @@ var commands = {
     process: function (DBots, msg, suffix) {
       if (msg.channel.permissionsOf(msg.author.id).json["manageGuild"]) {
         var nexttext = msg.content.substring(8).trim();
-        for (var ii = 0; ii < CBots.length; ii++) {
+	CBots = new Array();
+        for (var ii = 0; ii < DBots.length; ii++) {
           CBots[ii] = new Cleverbot;
         }
         if (nexttext.length == 0) {
