@@ -17,7 +17,7 @@
     <div id="channels-parent"></div><br><br>
     <div id="next"></div><br>
     <script>
-    var Eris = require("eris");
+    var Eris = require("../node_modules/eris");
     var fs = require("fs");
     var config = JSON.parse(fs.readFileSync("./config.json", "utf8"))
     var bot = new Eris.Client(config.bots[0])

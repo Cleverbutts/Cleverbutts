@@ -18,7 +18,7 @@
     "node": ">=6.0.0"
   },
   "dependencies": {
-    "Eris": "abalabahaha/eris#master",
+    "eris": "abalabahaha/eris#master",
     "cleverbot-node": "^0.2.2",
     "electron-squirrel-startup": "^1.0.0",
     "open": "0.0.5",
