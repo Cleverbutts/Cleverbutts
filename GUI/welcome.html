@@ -11,8 +11,14 @@
     <h1 class="title2">Cleverbutts Setup</h1>
     <a class="button" href="setup1.html">Start Setup <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
     <script>
+    var configPATH
+        if(process.platform === "win32") {
+          configPATH = `${process.env.USERPROFILE}/Documents/Cleverbutts/config.json`
+        } else {
+          configPATH = `${process.env.HOME}/Documents/Cleverbutts/config.json`
+        }
     var fs = require("fs");
-    if(fs.existsSync("./config.json")) { window.location = "main.html"; }
+    if(fs.existsSync(configPATH)) { window.location = "main.html"; }
     </script>
   </div>
   </center>

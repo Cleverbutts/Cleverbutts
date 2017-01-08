@@ -19,6 +19,7 @@
     var bopen = require("open");
     var success = false
     var request = require('request');
+    var mkdirp = require('mkdirp')
     var fs = require("fs");
     var tokenshhh = document.getElementsByClassName('tokenbox');
     var tokens = Array.prototype.slice.call(tokenshhh);
@@ -47,6 +48,16 @@
         }
       });
     }
+    var configPATH
+        if(process.platform === "win32") {
+          configPATH = `${process.env.USERPROFILE}/Documents/Cleverbutts/config.json`
+        } else {
+          configPATH = `${process.env.HOME}/Documents/Cleverbutts/config.json`
+        }
+    mkdirp(`${process.env.HOME}/Documents/Cleverbutts/`, function (err) {
+    if (err) console.error(err)
+    else {}
+    });
   function next(){
     tokens.forEach((t) => {
       if(t.value != "") {
@@ -55,7 +66,7 @@
     });
     if(botTokens.length > 1){
       var bill = JSON.stringify(templateJSON);
-      fs.writeFile("./config.json", bill, (err) => {
+      fs.writeFile(configPATH, bill, (err) => {
         if (err) throw err;
         window.location = "setup2.html"
       });

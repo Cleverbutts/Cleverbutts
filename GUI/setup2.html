@@ -17,9 +17,16 @@
     <div id="channels-parent"></div><br><br>
     <div id="next"></div><br>
     <script>
+    var configPATH
+        if(process.platform === "win32") {
+          configPATH = `${process.env.USERPROFILE}/Documents/Cleverbutts/config.json`
+        } else {
+          configPATH = `${process.env.HOME}/Documents/Cleverbutts/config.json`
+        }
+
     var Eris = require("../node_modules/eris");
     var fs = require("fs");
-    var config = JSON.parse(fs.readFileSync("./config.json", "utf8"))
+    var config = JSON.parse(fs.readFileSync(configPATH, "utf8"))
     var bot = new Eris.Client(config.bots[0])
     bot.connect();
 
@@ -47,7 +54,7 @@
     function next() {
       config.botChannel = document.getElementById("channels").value
       var bill = JSON.stringify(config)
-      fs.writeFile("./config.json", bill, (err) => {
+      fs.writeFile(configPATH, bill, (err) => {
         if (err) throw err;
         window.location = "done.html"
       });

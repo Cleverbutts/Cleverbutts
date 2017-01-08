@@ -1,7 +1,15 @@
 var Cleverbot = require('cleverbot-node')
   , Eris = require('eris')
   , fs = require("fs")
-  , config = JSON.parse(fs.readFileSync("./config.json", "utf8"))
+
+  var configPATH
+      if(process.platform === "win32") {
+        configPATH = `${process.env.USERPROFILE}/Documents/Cleverbutts/config.json`
+      } else {
+        configPATH = `${process.env.HOME}/Documents/Cleverbutts/config.json`
+      }
+
+var config = JSON.parse(fs.readFileSync(configPATH, "utf8"))
   , DBots = []
   , CBots = []
   , randombot = Math.floor(Math.random() * (config.bots.length - 1))

@@ -1,7 +1,7 @@
 var Cleverbot = require('cleverbot-node')
   , Eris = require('eris')
   , fs = require("fs")
-  , config = require("./config.json")
+  , config = require(configPATH)
   , DBots = []
   , CBots = []
   , randombot = Math.floor(Math.random() * (config.bots.length - 1))
@@ -9,6 +9,13 @@ var Cleverbot = require('cleverbot-node')
   , lastMessage = "Hello there!"
   , voters = []
   , votes = 0;
+
+  var configPATH
+      if(process.platform === "win32") {
+        configPATH = `${process.env.USERPROFILE}/Documents/Cleverbutts/config.json`
+      } else {
+        configPATH = `${process.env.HOME}/Documents/Cleverbutts/config.json`
+      }
 
 var botNum = 0
 for (var ii = 0; ii < config.bots.length; ii++) {
@@ -166,7 +173,7 @@ var commands = {
         }
         if (startMSG != "") {
           config.startMessage = startMSG;
-          fs.writeFile("./config.json", JSON.stringify(config, null, 2), function () {
+          fs.writeFile(configPATH, JSON.stringify(config, null, 2), function () {
             process.exit()
           });
         }
