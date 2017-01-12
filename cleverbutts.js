@@ -128,6 +128,13 @@ var commands = {
       DBots[i].createMessage(msg.channel.id, config.host)
     }
   },
+ "about": {
+    desc: "Gives credit to creators", usage: "",
+    process: function (DBots, msg, suffix) {
+      DBots[i].createMessage(msg.channel.id, `Cleverbutts is a project made by AlexFlipnote and SplitPixl, bots that are talking to each other.
+The link to the source code can be found at http://github.com/Cleverbutts/Cleverbutts`)
+    }
+  },
   "vote": {
     desc: "Vote to restart the bots", usage: "",
     process: function (DBots, msg, suffix) {
