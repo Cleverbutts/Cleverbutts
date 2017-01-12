@@ -4,9 +4,9 @@ var Cleverbot = require('cleverbot-node')
 
   var configPATH
       if(process.platform === "win32") {
-        configPATH = `${process.env.USERPROFILE}/Documents/Cleverbutts/config.json`
+        configPATH = process.env.APPDATA + '\\cbconfig.json' || (process.platform == 'darwin' ? process.env.HOME + 'Library/Application Support/cbconfig.json' : '/var/local/cbconfig.json')`${process.env.USERPROFILE}/Documents/Cleverbutts/config.json`
       } else {
-        configPATH = `${process.env.HOME}/Documents/Cleverbutts/config.json`
+        configPATH = process.env.APPDATA + '\\cbconfig.json' || (process.platform == 'darwin' ? process.env.HOME + 'Library/Application Support/cbconfig.json' : '/var/local/cbconfig.json')`${process.env.HOME}/Documents/Cleverbutts/config.json`
       }
 
 var config = JSON.parse(fs.readFileSync(configPATH, "utf8"))

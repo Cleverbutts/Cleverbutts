@@ -15,13 +15,13 @@
     </select>
     </div><br><br>
     <div id="channels-parent"></div><br><br>
-    <div id="next"></div><br>
+    <div id="next"><a href="setup1.html" class="button"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</a>  </div><br>
     <script>
     var configPATH
         if(process.platform === "win32") {
-          configPATH = `${process.env.USERPROFILE}/Documents/Cleverbutts/config.json`
+          configPATH = process.env.APPDATA + '\\cbconfig.json' || (process.platform == 'darwin' ? process.env.HOME + 'Library/Application Support/cbconfig.json' : '/var/local/cbconfig.json')`${process.env.USERPROFILE}/Documents/Cleverbutts/config.json`
         } else {
-          configPATH = `${process.env.HOME}/Documents/Cleverbutts/config.json`
+          configPATH = process.env.APPDATA + '\\cbconfig.json' || (process.platform == 'darwin' ? process.env.HOME + 'Library/Application Support/cbconfig.json' : '/var/local/cbconfig.json')`${process.env.HOME}/Documents/Cleverbutts/config.json`
         }
 
     var Eris = require("../node_modules/eris");
@@ -48,7 +48,7 @@
         }
       });
       document.getElementById("channels").innerHTML = channels.join("")
-      document.getElementById("next").innerHTML = '<a href="#" class="button" onclick="next()" id="next">Next <i class="fa fa-arrow-right" aria-hidden="true"></i></a>'
+      document.getElementById("next").innerHTML += ' <a href="#" class="button" onclick="next()" id="next">Next <i class="fa fa-arrow-right" aria-hidden="true"></i></a>'
     }
 
     function next() {

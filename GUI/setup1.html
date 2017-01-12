@@ -48,17 +48,11 @@
         }
       });
     }
-    var configPATH
-        if(process.platform === "win32") {
-          configPATH = `${process.env.USERPROFILE}/Documents/Cleverbutts/config.json`
-        } else {
-          configPATH = `${process.env.HOME}/Documents/Cleverbutts/config.json`
-        }
+    var configPATH = process.env.APPDATA + '\\cbconfig.json' || (process.platform == 'darwin' ? process.env.HOME + 'Library/Application Support/cbconfig.json' : '/var/local/cbconfig.json')
+  function next(){
     mkdirp(`${process.env.HOME}/Documents/Cleverbutts/`, function (err) {
     if (err) console.error(err)
-    else {}
-    });
-  function next(){
+    else {
     tokens.forEach((t) => {
       if(t.value != "") {
         botTokens.push(t.value)
@@ -73,7 +67,9 @@
     } else {
       //throw an error
     }
-  }
+    }
+      });
+    }
     var templateJSON = {
       startMessage: 'This is the start message',
       botChannel: 'TBD',
