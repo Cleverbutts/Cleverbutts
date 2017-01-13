@@ -38,6 +38,9 @@ var i = 0, callback = function callback(resp) {
     var toWrite = resp['message'];
     if (newtext) {
       toWrite = newtext;
+      if(config.stopLoop === true) {
+      if((toWrite.toLowerCase()).indexOf("yes, no") >= 0 || (toWrite.toLowerCase()).indexOf("not why") >= 0 || (toWrite.toLocaleLowerCase()).indexOf("time infinity" >= 0) || (toWrite.toLocaleLowerCase()).indexOf("know any other bots") >=0) toWrite = config.startMessage;
+      }
       newtext = undefined;
     }
     CBots[i].write(toWrite, callback);
