@@ -46,7 +46,7 @@ var i = 0, callback = function callback(resp) {
     }
     if(lastMessages.length >= 5) {
     for (i = 0; i < lastMessages.length -1; i++) { 
-         if(lastMessages[i] === toWrite) toWrite = config.startMessage; lastMessages = [];
+         if(lastMessages[i].toLowerCase() === toWrite.toLowerCase()) toWrite = config.startMessage; lastMessages = [];
         }
       }    	    
     }
