@@ -39,6 +39,16 @@ var i = 0, callback = function callback(resp) {
     if (newtext) {
       toWrite = newtext;
       newtext = undefined;
+    } 
+    if(config.stopLoop === true) {
+    if(lastMessages.length < 5) {
+         lastMessages.push(toWrite);
+    }
+    if(lastMessages.length >= 5) {
+    for (i = 0; i < lastMessages.length -1; i++) { 
+         if(lastMessages[i] === toWrite) toWrite = config.startMessage; lastMessages = [];
+        }
+      }    	    
     }
     CBots[i].write(toWrite, callback);
     DBots[i = ((i + 1) % DBots.length)].createMessage(config.botChannel, toWrite).catch(err => console.log(err.stack));
