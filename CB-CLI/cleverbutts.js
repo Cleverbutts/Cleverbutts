@@ -8,7 +8,8 @@ var Cleverbot = require('cleverbot-node')
   , newtext = undefined
   , lastMessage = "Hello there!"
   , voters = []
-  , votes = 0;
+  , votes = 0,
+  , lastMessages = [];
 
 var botNum = 0
 for (var ii = 0; ii < config.bots.length; ii++) {
