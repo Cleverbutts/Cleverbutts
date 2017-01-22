@@ -30,6 +30,7 @@ function loadBots(){
     });
     DBots[ii].connect();
     CBots.push(new Cleverbot)
+    CBots[ii].configure({botapi: "Cleverbutts-GUI-" + config.botChannel});
   }
 }
 
@@ -64,7 +65,6 @@ var i = 0, callback = function callback(resp) {
 };
 
 function start() {
-  Cleverbot.configure({botapi: config.botChannel});
   Cleverbot.prepare(function () {
     lastMessage = config.startMessage; callback({ message: config.startMessage })
   });
