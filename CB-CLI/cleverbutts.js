@@ -12,7 +12,7 @@ var Cleverbot = require('cleverbot-node')
   , lastMessages = [];
 
 // Temporarily override cleverbot-node's path
-Cleverbot.prototype.path = () => '/webservicemin?uc=777&botapi=' + ( this.botapi ? this.botapi : 'CHANGEME' );
+Cleverbot.prototype.path = function() { return '/webservicemin?uc=777&botapi=' + ( this.botapi ? this.botapi : 'CHANGEME' ); };
 
 var botNum = 0
 for (var ii = 0; ii < config.bots.length; ii++) {

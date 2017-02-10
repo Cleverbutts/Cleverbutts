@@ -3,7 +3,7 @@ var Cleverbot = require('cleverbot-node')
   , fs = require("fs")
 
 // Temporarily override cleverbot-node's path
-Cleverbot.prototype.path = () => '/webservicemin?uc=777&botapi=' + ( this.botapi ? this.botapi : 'CHANGEME' );
+Cleverbot.prototype.path = function() { return '/webservicemin?uc=777&botapi=' + ( this.botapi ? this.botapi : 'CHANGEME' ); };
 
   var configPATH
       if(process.platform === "win32") {
