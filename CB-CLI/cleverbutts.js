@@ -11,6 +11,9 @@ var Cleverbot = require('cleverbot-node')
   , votes = 0
   , lastMessages = [];
 
+// Temporarily override cleverbot-node's path
+Cleverbot.prototype.path = () => '/webservicemin?uc=777&botapi=' + ( this.botapi ? this.botapi : 'CHANGEME' );
+
 var botNum = 0
 for (var ii = 0; ii < config.bots.length; ii++) {
   DBots.push(new Eris.Client("Bot " + config.bots[ii]))

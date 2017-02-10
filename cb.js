@@ -2,6 +2,9 @@ var Cleverbot = require('cleverbot-node')
   , Eris = require('eris')
   , fs = require("fs")
 
+// Temporarily override cleverbot-node's path
+Cleverbot.prototype.path = () => '/webservicemin?uc=777&botapi=' + ( this.botapi ? this.botapi : 'CHANGEME' );
+
   var configPATH
       if(process.platform === "win32") {
         configPATH = process.env.APPDATA + '\\cbconfig.json' || (process.platform == 'darwin' ? process.env.HOME + 'Library/Application Support/cbconfig.json' : '/var/local/cbconfig.json')`${process.env.USERPROFILE}/Documents/Cleverbutts/config.json`
